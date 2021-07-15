@@ -1,0 +1,32 @@
+spring:
+  cloud:
+    function:
+      definition: orderConsumer;menuConsumer
+    stream:
+      bindings:
+        default:
+          destination: restaurant
+          group: restaurant-group
+      kafka:
+        bindings:
+          orderConsumer-in-0:
+            consumer:
+              ackEachRecord: true
+              autoCommitOffset: true
+              autoCommitOnError: false
+          menuConsumer-in-0:
+            consumer:
+              ackEachRecord: true
+              autoCommitOffset: true
+              autoCommitOnError: false
+        binder:
+          brokers: localhost
+          defaultBrokerPort: 9092
+          configuration:
+            auto.offset.reset: earliest
+          # The list of custom headers that are transported by the binder. Only required when communicating with older applications (⇐ 1.3.x) with a kafka-clients version < 0.11.0.0.
+          # Newer versions support headers natively.
+          headers: event_type
+          headerMapperBeanName: kafkaHeaderMapper
+          autoCreateTopics: false
+
